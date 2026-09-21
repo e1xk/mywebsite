@@ -1,5 +1,5 @@
 /* ============================================================
-   DonutCraft — real pack data (from data.js) + interactivity
+   DonutZach — real pack data (from data.js) + interactivity
    ============================================================ */
 'use strict';
 
@@ -80,7 +80,7 @@ function drawPackTexture(canvas, pack, cells = 12) {
 
 const state = { q: '', cat: 'All', sort: 'az', favOnly: false };
 
-const FAV_KEY = 'donutcraft-favs';
+const FAV_KEY = 'donutzach-favs';
 let favs = new Set();
 try { favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]')); } catch (_) { /* private mode */ }
 const saveFavs = () => { try { localStorage.setItem(FAV_KEY, JSON.stringify([...favs])); } catch (_) {} };

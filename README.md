@@ -1,10 +1,10 @@
-# 🍩 DonutCraft — Minecraft Texture Packs
+# 🍩 DonutZach — Minecraft Texture Packs
 
 A community "bakery" concept site for Minecraft texture packs, built with plain
 HTML / CSS / JavaScript — no frameworks, no build step. Every listed pack is a
 real `.zip` hosted right here and downloadable in one click.
 
-![DonutCraft logo](assets/logo.png)
+![DonutZach logo](assets/logo.png)
 
 ## Features
 

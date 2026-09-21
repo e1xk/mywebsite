@@ -120,6 +120,16 @@ body.no-scroll { overflow: hidden; }
 
 .btn-green { background: linear-gradient(180deg, #7ee881, #46c74e); color: #08300e; }
 .btn-pink { background: linear-gradient(180deg, #ff7ac2, #ff2ea6); color: #2b0016; }
+.btn-discord { background: linear-gradient(180deg, #7c8cff, #5865f2); color: #fff; }
+.btn-discord svg { flex: none; }
+
+.discord-btn { color: #9aa5ff; }
+.discord-btn:hover {
+  border-color: #5865f2;
+  color: #c3caff;
+  background: rgba(88, 101, 242, 0.16);
+}
+.discord-btn svg { display: block; }
 
 .btn-mini { padding: 10px 14px 9px; font-size: 0.68rem; border-radius: 8px; border-width: 2px; }
 
