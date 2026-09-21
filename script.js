@@ -165,7 +165,12 @@ function cardEl(p) {
 function render() {
   const list = visiblePacks();
   grid.innerHTML = '';
-  list.forEach(p => grid.appendChild(cardEl(p)));
+  list.forEach((p, i) => {
+    const el = cardEl(p);
+    el.classList.add('card-enter');
+    el.style.setProperty('--i', Math.min(i, 12));
+    grid.appendChild(el);
+  });
   emptyEl.hidden = list.length > 0;
   countEl.textContent = `Showing ${list.length} of ${PACKS.length} ${state.favOnly ? 'favorites' : 'packs'}`;
 }
@@ -227,13 +232,22 @@ $('#favBtn').addEventListener('click', () => {
 });
 
 /* category tiles */
+const revealIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    en.target.classList.add('in');
+    revealIO.unobserve(en.target);
+  });
+}, { threshold: 0.12 });
+
 function buildCatTiles() {
   const grid = $('#catGrid');
   const cats = [...new Set(PACKS.map(p => p.category))];
-  cats.forEach(cat => {
+  cats.forEach((cat, i) => {
     const n = PACKS.filter(p => p.category === cat).length;
     const tile = document.createElement('button');
-    tile.className = 'cat-tile';
+    tile.className = 'cat-tile reveal';
+    tile.style.transitionDelay = (i * 60) + 'ms';
     tile.dataset.cat = cat;
     tile.innerHTML = `<span class="cat-emoji" aria-hidden="true">${PACKS.find(p => p.category === cat).emoji}</span><b>${cat}</b><span class="cat-count">${n} pack${n === 1 ? '' : 's'}</span>`;
     tile.addEventListener('click', () => {
@@ -241,6 +255,7 @@ function buildCatTiles() {
       $('#packs').scrollIntoView({ behavior: 'smooth' });
     });
     grid.appendChild(tile);
+    revealIO.observe(tile);
   });
 }
 
@@ -290,11 +305,40 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hid
 
 $('#modalFav').addEventListener('click', () => { if (currentPack) toggleFav(currentPack.id); });
 
-/* download feedback for every real download link */
+/* download feedback: toast + sprinkle burst for every real download link */
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-dl]');
-  if (a) showToast(`⬇ Downloading ${a.dataset.name}.zip …`);
+  if (!a) return;
+  showToast(`⬇ Downloading ${a.dataset.name}.zip …`);
+  if (motionOK) sprinkleBurst(e.clientX, e.clientY);
 });
+
+function sprinkleBurst(x, y) {
+  const colors = ['#ff2ea6', '#29e0e8', '#ffc233', '#9b5cff', '#ff7ac2'];
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('span');
+    p.className = 'burst-pill';
+    const w = 6 + Math.random() * 9;
+    p.style.width = w + 'px';
+    p.style.height = Math.round(w * 0.45) + 'px';
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    p.style.background = colors[i % colors.length];
+    document.body.appendChild(p);
+    const ang = Math.random() * Math.PI * 2;
+    const dist = 44 + Math.random() * 70;
+    p.animate(
+      [
+        { transform: 'rotate(0deg)', opacity: 1 },
+        {
+          transform: `translate(${Math.cos(ang) * dist}px, ${Math.sin(ang) * dist - 22}px) rotate(${Math.round(Math.random() * 300 - 150)}deg)`,
+          opacity: 0
+        }
+      ],
+      { duration: 620 + Math.random() * 380, easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }
+    ).onfinish = () => p.remove();
+  }
+}
 
 /* ---------------- spotlight ---------------- */
 
@@ -407,6 +451,95 @@ $$('[data-demo]').forEach(el => el.addEventListener('click', e => {
   showToast('🍩 This is a concept demo — that page is still in the oven.');
 }));
 
+/* ---------------- interactivity: tilt, ripple, reveal, scrollspy, parallax ---------------- */
+
+const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const motionOK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* 3D tilt that follows the pointer across pack cards */
+if (finePointer && motionOK) {
+  grid.addEventListener('pointermove', e => {
+    const card = e.target.closest('.pack-card');
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform =
+      `translateY(-6px) perspective(750px) rotateX(${(-py * 7).toFixed(2)}deg) rotateY(${(px * 7).toFixed(2)}deg)`;
+  });
+  grid.addEventListener('pointerout', e => {
+    const card = e.target.closest('.pack-card');
+    if (card && !card.contains(e.relatedTarget)) card.style.transform = '';
+  });
+}
+
+/* soft ripple inside pixel buttons */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.btn-pixel');
+  if (!btn || !motionOK) return;
+  const r = btn.getBoundingClientRect();
+  const x = e.clientX ? e.clientX - r.left : r.width / 2;
+  const y = e.clientY ? e.clientY - r.top : r.height / 2;
+  const s = document.createElement('span');
+  s.className = 'ripple';
+  s.style.left = x + 'px';
+  s.style.top = y + 'px';
+  btn.appendChild(s);
+  s.addEventListener('animationend', () => s.remove());
+});
+
+/* scroll-reveal for static sections */
+$$('[data-reveal]').forEach(el => {
+  el.classList.add('reveal');
+  revealIO.observe(el);
+});
+
+/* highlight the nav link of the section in view */
+function initScrollSpy() {
+  const links = $$('#navLinks a');
+  const map = new Map();
+  links.forEach(a => {
+    const sec = document.getElementById(a.getAttribute('href').slice(1));
+    if (sec) map.set(sec, a);
+  });
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      links.forEach(l => l.classList.remove('active'));
+      const a = map.get(en.target);
+      if (a) a.classList.add('active');
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  map.forEach((_, sec) => io.observe(sec));
+}
+
+/* hero art leans gently toward the pointer */
+function initParallax() {
+  if (!finePointer || !motionOK) return;
+  const hero = $('.hero');
+  const logo = $('.hero-logo');
+  const glow = $('.hero-glow');
+  const field = $('#sprinkleField');
+  let raf = 0;
+  hero.addEventListener('pointermove', e => {
+    const r = hero.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      logo.style.translate = `${(px * 14).toFixed(1)}px ${(py * 10).toFixed(1)}px`;
+      glow.style.translate = `${(px * -18).toFixed(1)}px ${(py * -12).toFixed(1)}px`;
+      field.style.translate = `${(px * 8).toFixed(1)}px ${(py * 6).toFixed(1)}px`;
+    });
+  });
+  hero.addEventListener('pointerleave', () => {
+    cancelAnimationFrame(raf);
+    logo.style.translate = '';
+    glow.style.translate = '';
+    field.style.translate = '';
+  });
+}
+
 /* ---------------- init ---------------- */
 
 fillHero();
@@ -417,3 +550,5 @@ buildCatTiles();
 render();
 updateFavUI();
 animateCounters();
+initScrollSpy();
+initParallax();
