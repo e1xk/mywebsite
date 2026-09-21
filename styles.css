@@ -414,8 +414,18 @@ body.no-scroll { overflow: hidden; }
   height: 152px;
   background: #050308;
   border-bottom: 2px solid var(--line);
+  overflow: hidden;
 }
 .pack-thumb canvas { width: 100%; height: 100%; display: block; }
+
+.thumb-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
 
 .pack-emoji {
   position: absolute;
@@ -460,7 +470,14 @@ body.no-scroll { overflow: hidden; }
 .pack-cat { color: var(--cyan); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
 .pack-cat span { color: var(--muted); text-transform: none; letter-spacing: 0; font-weight: 500; }
 .pack-name { font-size: 1.18rem; font-weight: 800; margin: 4px 0 1px; }
-.pack-author { color: var(--muted); font-size: 0.88rem; }
+.pack-desc-short {
+  color: var(--muted);
+  font-size: 0.88rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .pack-foot {
   display: flex;
@@ -468,8 +485,7 @@ body.no-scroll { overflow: hidden; }
   gap: 12px;
   margin-top: 13px;
 }
-.pack-rating { color: var(--yellow); font-weight: 700; font-size: 0.92rem; }
-.pack-dl { color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+.pack-size { color: var(--muted); font-size: 0.9rem; font-weight: 600; }
 .pack-foot .btn { margin-left: auto; }
 
 .empty {
@@ -742,20 +758,7 @@ body.no-scroll { overflow: hidden; }
 
 .modal-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
-.dl-progress {
-  margin-top: 16px;
-  height: 16px;
-  background: #0a0512;
-  border: 2px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.dl-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #46c74e, #7ee881);
-  transition: width 0.12s linear;
-}
+.modal-hint { color: var(--muted); font-size: 0.88rem; margin-top: 16px; }
 
 /* ============ toast ============ */
 

@@ -1,21 +1,32 @@
 # 🍩 DonutCraft — Minecraft Texture Packs
 
 A community "bakery" concept site for Minecraft texture packs, built with plain
-HTML / CSS / JavaScript — no frameworks, no build step.
+HTML / CSS / JavaScript — no frameworks, no build step. Every listed pack is a
+real `.zip` hosted right here and downloadable in one click.
 
 ![DonutCraft logo](assets/logo.png)
 
-**Live site:** once GitHub Pages is enabled, this README's repo serves the site
-directly from `index.html`.
-
 ## Features
 
-- 🍩 Hero with animated sprinkles, counters and a scrolling style ticker
-- 🔍 Pack shelf with live search, category chips and sorting (12 sample packs)
-- 🎨 Procedural pixel-art thumbnails drawn on `<canvas>` from each pack's palette
-- 📦 Pack detail modal with simulated download progress + toast notifications
-- ♥ Favorites persisted in `localStorage`
+- 📦 20 real resource packs served directly from `packs/*.zip`
+- 🎨 Thumbnails are the actual `pack.png` icons extracted from each zip
+- 🏷️ Metadata (description, pack format, texture resolution) parsed from each
+  pack's `pack.mcmeta` and PNG headers — no hand-typed data
+- 🔍 Live search, category chips, sorting, favorites (saved in `localStorage`)
+- 🍩 Hero with animated sprinkles, counters and a scrolling ticker
 - 📱 Responsive down to phones, `prefers-reduced-motion` respected
+
+## Adding a pack
+
+1. Drop the `.zip` into `packs/`
+2. Run the generator:
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass -File build_packs.ps1
+   ```
+3. Commit and push — GitHub Pages redeploys automatically
+
+The generator reads from `C:\Users\zachw\Downloads\resourcepacks\` by default;
+edit `$zips = ...` at the bottom of the scan section to change the source.
 
 ## Run locally
 

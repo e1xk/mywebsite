@@ -42,7 +42,7 @@
     <div class="sprinkle-field" id="sprinkleField" aria-hidden="true"></div>
     <div class="container hero-inner">
       <div class="hero-copy">
-        <p class="hero-badge"><span class="dot" aria-hidden="true"></span> 2,400+ free packs · updated for 1.21</p>
+        <p class="hero-badge"><span class="dot" aria-hidden="true"></span> <span id="heroBadge">Free packs · download &amp; play</span></p>
         <h1>Sweeten your <span class="grad">Minecraft</span> world</h1>
         <p class="hero-sub">DonutCraft is the community bakery for texture packs — candy cartoon, hardcore PvP, faithful vanilla and everything in between. Fresh pixels, every day.</p>
         <div class="hero-cta">
@@ -50,9 +50,9 @@
           <a class="btn btn-ghost" href="#spotlight">Pack of the week</a>
         </div>
         <dl class="hero-stats">
-          <div><dd data-count="2437">0</dd><dt>packs on the shelf</dt></div>
-          <div><dd data-count="12.4" data-suffix="M">0</dd><dt>downloads served</dt></div>
-          <div><dd data-count="860">0</dd><dt>texture artists</dt></div>
+          <div><dd id="statPacks" data-count="0">0</dd><dt>free packs</dt></div>
+          <div><dd>100%</dd><dt>free downloads</dt></div>
+          <div><dd>0</dd><dt>ads, ever</dt></div>
         </dl>
       </div>
       <div class="hero-art" aria-hidden="true">
@@ -83,10 +83,10 @@
         </div>
         <div class="chips" id="chips" aria-label="Filter by category"></div>
         <select id="sortSelect" class="select" aria-label="Sort packs">
-          <option value="downloads">Most downloaded</option>
-          <option value="rating">Highest rated</option>
-          <option value="newest">Recently updated</option>
           <option value="az">A → Z</option>
+          <option value="newest">Recently added</option>
+          <option value="size-desc">Largest first</option>
+          <option value="size-asc">Smallest first</option>
         </select>
       </div>
       <p class="result-count" id="resultCount" role="status"></p>
@@ -99,22 +99,22 @@
   <section class="section" id="spotlight">
     <div class="container">
       <div class="spot-card">
-        <div class="spot-media">
-          <span class="spot-badge">★ Pack of the week</span>
+        <div class="spot-media" id="spotMedia">
+          <span class="spot-badge">★ Featured pack</span>
           <canvas id="spotCanvas" width="12" height="12" aria-hidden="true"></canvas>
           <span class="spot-emoji" id="spotEmoji">🍩</span>
         </div>
         <div class="spot-body">
           <p class="spot-kicker">Fresh out of the oven</p>
           <h2 id="spotTitle">—</h2>
-          <p class="spot-by">by <span id="spotAuthor"></span> · <span id="spotCat"></span> · <span id="spotRes"></span></p>
+          <p class="spot-by"><span id="spotCat"></span> · <span id="spotRes"></span></p>
           <p class="spot-desc" id="spotDesc"></p>
           <ul class="spot-list" id="spotList"></ul>
           <div class="spot-meta">
             <span id="spotRating"></span><span id="spotDl"></span><span id="spotSize"></span>
           </div>
           <div class="spot-actions">
-            <button class="btn btn-pixel btn-green" id="spotDownload">⬇ Download .zip</button>
+            <a class="btn btn-pixel btn-green" id="spotDownload" href="#" download>⬇ Download .zip</a>
             <button class="btn btn-ghost" id="spotDetails">View details</button>
           </div>
         </div>
@@ -129,14 +129,7 @@
         <h2>Pick a flavor</h2>
         <p>Every shelf of the bakery, one click away.</p>
       </div>
-      <div class="cat-grid">
-        <button class="cat-tile" data-cat="Cartoon"><span class="cat-emoji" aria-hidden="true">🍬</span><b>Cartoon</b><span class="cat-count" data-count-for="Cartoon"></span></button>
-        <button class="cat-tile" data-cat="Realistic"><span class="cat-emoji" aria-hidden="true">🪨</span><b>Realistic</b><span class="cat-count" data-count-for="Realistic"></span></button>
-        <button class="cat-tile" data-cat="Faithful"><span class="cat-emoji" aria-hidden="true">🧱</span><b>Faithful</b><span class="cat-count" data-count-for="Faithful"></span></button>
-        <button class="cat-tile" data-cat="PvP"><span class="cat-emoji" aria-hidden="true">⚔️</span><b>PvP</b><span class="cat-count" data-count-for="PvP"></span></button>
-        <button class="cat-tile" data-cat="RPG"><span class="cat-emoji" aria-hidden="true">🕯️</span><b>RPG</b><span class="cat-count" data-count-for="RPG"></span></button>
-        <button class="cat-tile" data-cat="Whimsical"><span class="cat-emoji" aria-hidden="true">🏡</span><b>Whimsical</b><span class="cat-count" data-count-for="Whimsical"></span></button>
-      </div>
+      <div class="cat-grid" id="catGrid"></div>
     </div>
   </section>
 
@@ -223,33 +216,30 @@
   <div class="modal-backdrop" data-close></div>
   <div class="modal-card">
     <button class="modal-close" data-close aria-label="Close details">✕</button>
-    <div class="modal-media">
-      <canvas id="modalCanvas" width="12" height="12" aria-hidden="true"></canvas>
-      <span class="pack-emoji" id="modalEmoji" aria-hidden="true">🍩</span>
-    </div>
+    <div class="modal-media" id="modalMedia"></div>
     <div class="modal-body">
       <p class="modal-cat" id="modalCat"></p>
       <h3 id="modalTitle">—</h3>
-      <p class="modal-by">by <span id="modalAuthor"></span> · updated <span id="modalUpdated"></span></p>
+      <p class="modal-by">added <span id="modalAdded"></span> · <span id="modalFile"></span></p>
       <p class="modal-desc" id="modalDesc"></p>
       <div class="modal-meta">
         <div><b id="modalRes"></b><span>resolution</span></div>
-        <div><b id="modalRating"></b><span>rating</span></div>
-        <div><b id="modalDl"></b><span>downloads</span></div>
+        <div><b id="modalFormat"></b><span>compatibility</span></div>
         <div><b id="modalSize"></b><span>file size</span></div>
+        <div><b>.zip</b><span>instant download</span></div>
       </div>
-      <div class="modal-versions" id="modalVersions" aria-label="Supported versions"></div>
       <div class="modal-actions">
-        <button class="btn btn-pixel btn-green" id="modalDownload">⬇ Download .zip</button>
-        <button class="btn btn-ghost" id="modalFav">♥ Favorite</button>
+        <a class="btn btn-pixel btn-green" id="modalDownload" href="#" download>⬇ Download .zip</a>
+        <button class="btn btn-ghost" id="modalFav">♡ Favorite</button>
       </div>
-      <div class="dl-progress" id="dlProgress" hidden><div class="dl-bar" id="dlBar"></div></div>
+      <p class="modal-hint">Drop the .zip into <code>.minecraft/resourcepacks</code> — no unzipping needed.</p>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast" role="status" hidden></div>
 
+<script src="data.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

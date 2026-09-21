@@ -1,142 +1,19 @@
 /* ============================================================
-   DonutCraft — data + interactivity
+   DonutCraft — real pack data (from data.js) + interactivity
    ============================================================ */
 'use strict';
 
-/* ---------------- pack data ---------------- */
-
-const PACKS = [
-  {
-    id: 'sugar-rush', name: 'Sugar Rush 32x', author: 'FrostBloom', res: '32x',
-    cat: 'Cartoon', dl: 2143000, rating: 4.9, size: '34 MB',
-    versions: ['1.21.1', '1.20.6', '1.19.4'],
-    updated: 'Sep 12, 2026', ts: Date.UTC(2026, 8, 12),
-    emoji: '🍩', featured: true,
-    palette: ['#ff2ea6', '#c81d7d', '#ffd6ec', '#29e0e8'],
-    desc: 'Every block re-iced. Candy-striped pillars, frosted glass and glowing donut lanterns — the official DonutCraft flavor for builders with a sweet tooth.',
-    features: ['🍩 Donut lanterns glow with real warm light', '🍬 Candy-striped terracotta & wool palette', '🪟 Frosted glass that still lets you spot mobs', '🧁 4,300+ retextured blocks & items']
-  },
-  {
-    id: 'vanilla-plus', name: 'Vanilla Plus 32x', author: 'CopperKettle', res: '32x',
-    cat: 'Faithful', dl: 3412000, rating: 4.9, size: '21 MB',
-    versions: ['1.21.1', '1.20.6'],
-    updated: 'Sep 8, 2026', ts: Date.UTC(2026, 8, 8),
-    emoji: '🧱',
-    palette: ['#8bc34a', '#5d8a2f', '#d7e8a8', '#e0b47a'],
-    desc: 'Vanilla, but freshly baked. Doubles the resolution of every default texture while keeping the exact look and feel Mojang intended.',
-    features: ['🧱 Same palette, double the detail', '🛠️ Optimized for shader pipelines', '🌍 Full support for trail & cherry biomes']
-  },
-  {
-    id: 'chroma-pvp', name: 'Chroma PvP 16x', author: 'VoidKat', res: '16x',
-    cat: 'PvP', dl: 1804000, rating: 4.7, size: '8 MB',
-    versions: ['1.21.1', '1.20.4', '1.8.9'],
-    updated: 'Sep 15, 2026', ts: Date.UTC(2026, 8, 15),
-    emoji: '⚔️',
-    palette: ['#29e0e8', '#0e8fa8', '#bff7fb', '#ff2ea6'],
-    desc: 'Tournament-grade clarity. Low fire, clean skies, crisp outlines and color-coded gear so you never lose track of a duel again.',
-    features: ['🔥 Low-fire & no-fire variants included', '🗡️ Outlined enemy armor trim', '☁️ Cloudless skies for max visibility', '📦 Tiny 8 MB file, zero FPS cost']
-  },
-  {
-    id: 'realstone', name: 'RealStone HD 128x', author: 'QuarryLab', res: '128x',
-    cat: 'Realistic', dl: 954000, rating: 4.8, size: '210 MB',
-    versions: ['1.21.1', '1.20.6'],
-    updated: 'Sep 2, 2026', ts: Date.UTC(2026, 8, 2),
-    emoji: '🪨',
-    palette: ['#8d7460', '#5c4a3a', '#c9b295', '#6d9c4a'],
-    desc: 'Photogrammetry-grade stone, wood and metal scanned from real quarries. PBR-ready for shader users, and still readable in vanilla lighting.',
-    features: ['📸 Real scanned material surfaces', '💡 Full PBR + normal map pack included', '🏚️ Weathered variants for every wall']
-  },
-  {
-    id: 'neon-nights', name: 'Neon Nights 64x', author: 'SynthWraith', res: '64x',
-    cat: 'Cartoon', dl: 612000, rating: 4.6, size: '96 MB',
-    versions: ['1.21.1', '1.20.6'],
-    updated: 'Aug 28, 2026', ts: Date.UTC(2026, 7, 28),
-    emoji: '🌃',
-    palette: ['#9b5cff', '#5f2ea6', '#2de2c3', '#ff5ca8'],
-    desc: 'A synthwave takeover: glowing neon blocks, chrome tools and sunset gradients baked into every biome. Best served with shaders turned to max.',
-    features: ['🌈 Emissive neon ores that glow in caves', '🎹 Note blocks get a synthwave face-lift', '🦑 Glowing squid are now glowsticks']
-  },
-  {
-    id: 'frostbound', name: 'Frostbound 128x', author: 'PolarPeak', res: '128x',
-    cat: 'Realistic', dl: 431000, rating: 4.7, size: '184 MB',
-    versions: ['1.21.1'],
-    updated: 'Sep 5, 2026', ts: Date.UTC(2026, 8, 5),
-    emoji: '❄️',
-    palette: ['#7fd4ff', '#3d7fb8', '#e8f8ff', '#b8e6ff'],
-    desc: 'Frozen peaks, frosted windows and breath-fog glass. A winter overhaul that makes every snow biome feel like a polar expedition.',
-    features: ['🧊 Semi-transparent ice with depth', '🌬️ Snow layers pile naturally on stairs', '🐧 Custom penguin textures for cold shores']
-  },
-  {
-    id: 'dungeon-candle', name: 'Dungeon Candle 64x', author: 'EmberForge', res: '64x',
-    cat: 'RPG', dl: 1207000, rating: 4.8, size: '132 MB',
-    versions: ['1.21.1', '1.20.6', '1.19.4'],
-    updated: 'Sep 10, 2026', ts: Date.UTC(2026, 8, 10),
-    emoji: '🕯️',
-    palette: ['#ffb020', '#a86a12', '#5a3a1a', '#ff5c3a'],
-    desc: 'Dark souls meets blocky caves. Grim stone, flickering torchlight and hand-drawn item frames that turn any basement into a boss arena.',
-    features: ['🕯️ Animated torch & lantern flames', '🗡️ 40+ RPG-style weapon textures', '🚪 Rusty dungeon doors and mossy vaults', '💀 New HUD with a grimdark coat of paint']
-  },
-  {
-    id: 'mossy-vale', name: 'Mossy Vale 16x', author: 'FernWhistle', res: '16x',
-    cat: 'Faithful', dl: 873000, rating: 4.5, size: '6 MB',
-    versions: ['1.21.1', '1.20.6', '1.18.2'],
-    updated: 'Aug 20, 2026', ts: Date.UTC(2026, 7, 20),
-    emoji: '🌿',
-    palette: ['#62d26f', '#2f8a44', '#bfe8a8', '#8a6a3a'],
-    desc: 'A gentle green reimagining of vanilla. Softer grass, warmer wood and moss creeping over everything — all at honest 16x resolution.',
-    features: ['🌿 Mossy variants for 30+ blocks', '🌻 Softer, warmer world palette', '⚖️ Zero impact on performance']
-  },
-  {
-    id: 'candy-kingdom', name: 'Candy Kingdom 32x', author: 'SprinkleWitch', res: '32x',
-    cat: 'Whimsical', dl: 2911000, rating: 4.9, size: '45 MB',
-    versions: ['1.21.1', '1.20.6'],
-    updated: 'Sep 3, 2026', ts: Date.UTC(2026, 8, 3),
-    emoji: '🏰',
-    palette: ['#ff7ac2', '#ffb020', '#fff3fa', '#8bd0ff'],
-    desc: 'Castles made of cake, bridges of chocolate and lava you will desperately want to taste. The sweetest build palette in the kingdom.',
-    features: ['🏰 Cake, cookie & waffle block set', '🍫 Chocolate lava with animated swirl', '🍭 Peppermint pillars in 16 colors']
-  },
-  {
-    id: 'obsidian-edge', name: 'Obsidian Edge 16x', author: 'NetherNine', res: '16x',
-    cat: 'PvP', dl: 1548000, rating: 4.4, size: '7 MB',
-    versions: ['1.21.1', '1.8.9'],
-    updated: 'Sep 1, 2026', ts: Date.UTC(2026, 8, 1),
-    emoji: '🗡️',
-    palette: ['#3d2a52', '#1c1030', '#8a6ac2', '#ff2e5c'],
-    desc: 'Shadow-black GUIs, high-contrast potions and a crystal-clear crosshair. Built for bedwars grinders who live on the edge.',
-    features: ['🖤 Pitch-black GUI panels', '🧪 Color-popped potion outlines', '🎯 6 included crosshair styles']
-  },
-  {
-    id: 'cozy-cottage', name: 'Cozy Cottage 32x', author: 'HearthHollow', res: '32x',
-    cat: 'Whimsical', dl: 1122000, rating: 4.8, size: '28 MB',
-    versions: ['1.21.1', '1.20.6'],
-    updated: 'Sep 14, 2026', ts: Date.UTC(2026, 8, 14),
-    emoji: '🏡',
-    palette: ['#e0a86a', '#a8743f', '#ffe9c2', '#7fb86a'],
-    desc: 'Warm timber, knitted wool and candle-lit windows. The pack equivalent of a blanket, a fireplace and rain on the roof.',
-    features: ['🕯️ Window light that actually feels warm', '🧶 Knitted wool patterns in every dye', '🪵 Hand-hewn timber beams']
-  },
-  {
-    id: 'pixel-bloom', name: 'Pixel Bloom 16x', author: 'PetalPixel', res: '16x',
-    cat: 'Cartoon', dl: 2314000, rating: 4.6, size: '9 MB',
-    versions: ['1.21.1', '1.20.6', '1.19.4'],
-    updated: 'Sep 16, 2026', ts: Date.UTC(2026, 8, 16),
-    emoji: '🌸',
-    palette: ['#ff8ac2', '#ff5c9e', '#ffe3f0', '#8ae0c8'],
-    desc: 'Spring, permanently. Cherry petals drift through pastel forests and every flower block got a glow-up. Lightweight enough for any laptop.',
-    features: ['🌸 Animated falling petals in forests', '🎨 Pastel overworld palette', '🪶 Under 10 MB, buttery smooth']
-  }
-];
+/* PACKS comes from data.js, generated by build_packs.ps1 */
+const PACKS = Array.isArray(window.REAL_PACKS) ? window.REAL_PACKS : [];
 
 /* ---------------- helpers ---------------- */
 
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 
-const fmt = n =>
-  n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M'
-  : n >= 1e3 ? Math.round(n / 1e3) + 'K'
-  : String(n);
+const fmtSize = b =>
+  b >= 1048576 ? (b / 1048576).toFixed(1).replace(/\.0$/, '') + ' MB'
+  : Math.max(1, Math.round(b / 1024)) + ' KB';
 
 function hashStr(s) {
   let h = 2166136261;
@@ -156,11 +33,22 @@ function mulberry32(a) {
   };
 }
 
-/* procedural pixel-art preview for each pack */
+/* deterministic palette for packs without a pack.png icon */
+function hashPalette(id) {
+  const h = hashStr(id) % 360;
+  return [
+    `hsl(${h} 62% 52%)`,
+    `hsl(${h} 55% 34%)`,
+    `hsl(${h} 72% 74%)`,
+    `hsl(${(h + 145) % 360} 68% 58%)`
+  ];
+}
+
+/* procedural pixel-art fallback thumbnail */
 function drawPackTexture(canvas, pack, cells = 12) {
   const ctx = canvas.getContext('2d');
   const rnd = mulberry32(hashStr(pack.id));
-  const [base, dark, light, accent] = pack.palette;
+  const [base, dark, light, accent] = hashPalette(pack.id);
   for (let y = 0; y < cells; y++) {
     for (let x = 0; x < cells; x++) {
       const r = rnd();
@@ -168,7 +56,6 @@ function drawPackTexture(canvas, pack, cells = 12) {
       ctx.fillRect(x, y, 1, 1);
     }
   }
-  // accent "ore" clusters
   const clusters = 2 + Math.floor(rnd() * 3);
   for (let i = 0; i < clusters; i++) {
     const cx = Math.floor(rnd() * cells);
@@ -183,7 +70,6 @@ function drawPackTexture(canvas, pack, cells = 12) {
       }
     }
   }
-  // bevel: light top edge, dark bottom edge
   ctx.fillStyle = 'rgba(255,255,255,0.16)';
   ctx.fillRect(0, 0, cells, 1);
   ctx.fillStyle = 'rgba(0,0,0,0.38)';
@@ -192,7 +78,7 @@ function drawPackTexture(canvas, pack, cells = 12) {
 
 /* ---------------- state ---------------- */
 
-const state = { q: '', cat: 'All', sort: 'downloads', favOnly: false };
+const state = { q: '', cat: 'All', sort: 'az', favOnly: false };
 
 const FAV_KEY = 'donutcraft-favs';
 let favs = new Set();
@@ -223,17 +109,17 @@ const emptyEl = $('#emptyState');
 function visiblePacks() {
   const q = state.q.trim().toLowerCase();
   const list = PACKS.filter(p => {
-    if (q && !(p.name + ' ' + p.author + ' ' + p.desc + ' ' + p.cat).toLowerCase().includes(q)) return false;
-    if (state.cat !== 'All' && p.cat !== state.cat) return false;
+    if (q && !(p.name + ' ' + p.desc + ' ' + p.category).toLowerCase().includes(q)) return false;
+    if (state.cat !== 'All' && p.category !== state.cat) return false;
     if (state.favOnly && !favs.has(p.id)) return false;
     return true;
   });
   const s = state.sort;
   list.sort((a, b) =>
-    s === 'rating' ? b.rating - a.rating
-    : s === 'newest' ? b.ts - a.ts
-    : s === 'az' ? a.name.localeCompare(b.name)
-    : b.dl - a.dl);
+    s === 'newest' ? b.ts - a.ts
+    : s === 'size-desc' ? b.bytes - a.bytes
+    : s === 'size-asc' ? a.bytes - b.bytes
+    : a.name.localeCompare(b.name));
   return list;
 }
 
@@ -243,34 +129,35 @@ function cardEl(p) {
   el.tabIndex = 0;
   el.setAttribute('role', 'button');
   el.setAttribute('aria-haspopup', 'dialog');
-  el.setAttribute('aria-label', `${p.name} by ${p.author} — open details`);
+  el.setAttribute('aria-label', `${p.name} — open details`);
+  const media = p.thumb
+    ? `<img class="thumb-img" src="${p.thumb}" alt="" loading="lazy">`
+    : `<canvas width="12" height="12" aria-hidden="true"></canvas>`;
   el.innerHTML = `
     <div class="pack-thumb">
-      <canvas width="12" height="12" aria-hidden="true"></canvas>
-      <span class="pack-emoji" aria-hidden="true">${p.emoji}</span>
-      <span class="pack-res">${p.res}</span>
+      ${media}
+      ${p.thumb ? '' : `<span class="pack-emoji" aria-hidden="true">${p.emoji}</span>`}
+      <span class="pack-res">${p.res || '—'}</span>
       <button class="fav-toggle" aria-pressed="${favs.has(p.id)}" aria-label="Toggle favorite for ${p.name}" title="Favorite">♥</button>
     </div>
     <div class="pack-body">
-      <p class="pack-cat">${p.cat} · <span>${p.updated}</span></p>
+      <p class="pack-cat">${p.category} · <span>added ${p.added}</span></p>
       <h3 class="pack-name">${p.name}</h3>
-      <p class="pack-author">by ${p.author}</p>
+      <p class="pack-desc-short">${p.desc}</p>
       <div class="pack-foot">
-        <span class="pack-rating" title="Rating">★ ${p.rating.toFixed(1)}</span>
-        <span class="pack-dl" title="Downloads">⬇ ${fmt(p.dl)}</span>
-        <button class="btn btn-pixel btn-green btn-mini" data-get aria-label="Download ${p.name}">Get</button>
+        <span class="pack-size" title="File size">📦 ${fmtSize(p.bytes)}</span>
+        <a class="btn btn-pixel btn-green btn-mini" href="${p.file}" download="${p.name}.zip" data-dl data-name="${p.name}" aria-label="Download ${p.name}">Get</a>
       </div>
     </div>`;
-  drawPackTexture($('canvas', el), p);
+  if (!p.thumb) drawPackTexture($('canvas', el), p);
 
   el.addEventListener('click', e => {
-    if (e.target.closest('[data-get]') || e.target.closest('.fav-toggle')) return;
+    if (e.target.closest('a') || e.target.closest('.fav-toggle')) return;
     openModal(p);
   });
   el.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(p); }
   });
-  $('[data-get]', el).addEventListener('click', () => quickDownload(p));
   $('.fav-toggle', el).addEventListener('click', e => { e.stopPropagation(); toggleFav(p.id); });
   return el;
 }
@@ -281,12 +168,6 @@ function render() {
   list.forEach(p => grid.appendChild(cardEl(p)));
   emptyEl.hidden = list.length > 0;
   countEl.textContent = `Showing ${list.length} of ${PACKS.length} ${state.favOnly ? 'favorites' : 'packs'}`;
-}
-
-function quickDownload(p) {
-  p.dl += 1;
-  render();
-  showToast(`📦 ${p.name}.zip saved to downloads — see you in game!`);
 }
 
 /* ---------------- favorites ---------------- */
@@ -312,7 +193,7 @@ function updateFavUI() {
 
 /* ---------------- toolbar ---------------- */
 
-const CATS = ['All', ...new Set(PACKS.map(p => p.cat))];
+const CATS = ['All', ...new Set(PACKS.map(p => p.category))];
 const chipsEl = $('#chips');
 
 function setCat(cat) {
@@ -346,39 +227,52 @@ $('#favBtn').addEventListener('click', () => {
 });
 
 /* category tiles */
-$$('.cat-tile').forEach(tile => {
-  const cat = tile.dataset.cat;
-  const n = PACKS.filter(p => p.cat === cat).length;
-  $(`.cat-count[data-count-for="${cat}"]`).textContent =
-    `${n} pack${n === 1 ? '' : 's'}`;
-  tile.addEventListener('click', () => {
-    setCat(cat);
-    $('#packs').scrollIntoView({ behavior: 'smooth' });
+function buildCatTiles() {
+  const grid = $('#catGrid');
+  const cats = [...new Set(PACKS.map(p => p.category))];
+  cats.forEach(cat => {
+    const n = PACKS.filter(p => p.category === cat).length;
+    const tile = document.createElement('button');
+    tile.className = 'cat-tile';
+    tile.dataset.cat = cat;
+    tile.innerHTML = `<span class="cat-emoji" aria-hidden="true">${PACKS.find(p => p.category === cat).emoji}</span><b>${cat}</b><span class="cat-count">${n} pack${n === 1 ? '' : 's'}</span>`;
+    tile.addEventListener('click', () => {
+      setCat(cat);
+      $('#packs').scrollIntoView({ behavior: 'smooth' });
+    });
+    grid.appendChild(tile);
   });
-});
+}
 
 /* ---------------- modal ---------------- */
 
 const modal = $('#packModal');
 let currentPack = null;
-let dlBusy = false;
 
 function openModal(p) {
   currentPack = p;
-  $('#modalCat').textContent = p.cat;
+  $('#modalCat').textContent = p.category;
   $('#modalTitle').textContent = p.name;
-  $('#modalAuthor').textContent = p.author;
-  $('#modalUpdated').textContent = p.updated;
+  $('#modalAdded').textContent = p.added;
   $('#modalDesc').textContent = p.desc;
-  $('#modalRes').textContent = p.res;
-  $('#modalRating').textContent = '★ ' + p.rating.toFixed(1);
-  $('#modalDl').textContent = fmt(p.dl);
-  $('#modalSize').textContent = p.size;
-  $('#modalEmoji').textContent = p.emoji;
-  $('#modalVersions').innerHTML = p.versions.map(v => `<span class="ver-chip">✔ ${v}</span>`).join('');
-  $('#dlProgress').hidden = true;
-  $('#modalDownload').disabled = false;
-  drawPackTexture($('#modalCanvas'), p);
+  $('#modalRes').textContent = p.res || '—';
+  $('#modalFormat').textContent = p.format ? 'Format ' + p.format : '—';
+  $('#modalSize').textContent = fmtSize(p.bytes);
+  $('#modalFile').textContent = p.id + '.zip';
+
+  const media = $('#modalMedia');
+  if (p.thumb) {
+    media.innerHTML = `<img class="thumb-img" src="${p.thumb}" alt="">`;
+  } else {
+    media.innerHTML = `<canvas id="modalCanvas" width="12" height="12" aria-hidden="true"></canvas><span class="pack-emoji" aria-hidden="true">${p.emoji}</span>`;
+    drawPackTexture($('#modalCanvas'), p);
+  }
+
+  const dl = $('#modalDownload');
+  dl.href = p.file;
+  dl.setAttribute('download', p.name + '.zip');
+  dl.dataset.name = p.name;
+
   updateFavUI();
   modal.hidden = false;
   document.body.classList.add('no-scroll');
@@ -389,7 +283,6 @@ function closeModal() {
   modal.hidden = true;
   document.body.classList.remove('no-scroll');
   currentPack = null;
-  dlBusy = false;
 }
 
 modal.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeModal(); });
@@ -397,49 +290,52 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hid
 
 $('#modalFav').addEventListener('click', () => { if (currentPack) toggleFav(currentPack.id); });
 
-$('#modalDownload').addEventListener('click', () => {
-  if (!currentPack || dlBusy) return;
-  dlBusy = true;
-  const wrap = $('#dlProgress');
-  const bar = $('#dlBar');
-  wrap.hidden = false;
-  bar.style.width = '0%';
-  let w = 0;
-  const t = setInterval(() => {
-    w = Math.min(100, w + 8 + Math.random() * 14);
-    bar.style.width = w + '%';
-    if (w >= 100) {
-      clearInterval(t);
-      dlBusy = false;
-      setTimeout(() => { wrap.hidden = true; }, 500);
-      currentPack.dl += 1;
-      $('#modalDl').textContent = fmt(currentPack.dl);
-      render();
-      showToast(`📦 ${currentPack.name}.zip saved to downloads — see you in game!`);
-    }
-  }, 110);
+/* download feedback for every real download link */
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-dl]');
+  if (a) showToast(`⬇ Downloading ${a.dataset.name}.zip …`);
 });
 
 /* ---------------- spotlight ---------------- */
 
 function fillSpotlight() {
-  const f = PACKS.find(p => p.featured) || PACKS[0];
+  const f = PACKS.find(p => p.featured);
+  if (!f) return;
   $('#spotTitle').textContent = f.name;
-  $('#spotAuthor').textContent = f.author;
-  $('#spotCat').textContent = f.cat;
-  $('#spotRes').textContent = f.res;
+  $('#spotCat').textContent = f.category;
+  $('#spotRes').textContent = f.res || 'zip';
   $('#spotDesc').textContent = f.desc;
-  $('#spotEmoji').textContent = f.emoji;
-  $('#spotRating').textContent = `★ ${f.rating.toFixed(1)} rated`;
-  $('#spotDl').textContent = `${fmt(f.dl)} downloads`;
-  $('#spotSize').textContent = `${f.size} · ${f.versions[0]} ready`;
-  $('#spotList').innerHTML = f.features.map(x => `<li>${x}</li>`).join('');
-  drawPackTexture($('#spotCanvas'), f, 12);
-  $('#spotDownload').addEventListener('click', () => quickDownload(f));
+  $('#spotRating').textContent = `📦 ${fmtSize(f.bytes)}`;
+  $('#spotDl').textContent = f.format ? `🧩 pack format ${f.format}` : '🧩 resource pack';
+  $('#spotSize').textContent = `🖼️ ${f.res || 'n/a'} · added ${f.added}`;
+  $('#spotList').innerHTML = [
+    `📦 ${fmtSize(f.bytes)} — downloads as a ready-to-use .zip`,
+    f.format ? `🧩 Pack format ${f.format}` : '🧩 Standard resource pack',
+    f.res ? `🖼️ ${f.res} textures` : '🖼️ Interface / font tweaks',
+    `📁 Drop the .zip into your .minecraft/resourcepacks folder — no unzipping`
+  ].map(x => `<li>${x}</li>`).join('');
+
+  const media = $('#spotMedia');
+  if (f.thumb) {
+    media.innerHTML = `<img class="thumb-img" src="${f.thumb}" alt="">`;
+  } else {
+    media.innerHTML = `<canvas id="spotCanvas" width="12" height="12" aria-hidden="true"></canvas><span class="spot-emoji" aria-hidden="true">${f.emoji}</span>`;
+    drawPackTexture($('#spotCanvas'), f);
+  }
+
+  const dl = $('#spotDownload');
+  dl.href = f.file;
+  dl.setAttribute('download', f.name + '.zip');
+  dl.dataset.name = f.name;
   $('#spotDetails').addEventListener('click', () => openModal(f));
 }
 
-/* ---------------- hero: sprinkles + marquee + counters ---------------- */
+/* ---------------- hero: badge, stats, sprinkles, marquee ---------------- */
+
+function fillHero() {
+  $('#heroBadge').textContent = `${PACKS.length} free packs · download & play`;
+  $('#statPacks').dataset.count = PACKS.length;
+}
 
 function makeSprinkles() {
   const field = $('#sprinkleField');
@@ -463,7 +359,7 @@ function makeSprinkles() {
 }
 
 function makeMarquee() {
-  const words = ['16x', '32x', '64x', '128x', 'PvP', 'Cartoon', 'Realistic', 'Faithful', 'RPG', 'Whimsical', 'Free downloads', '1.21 ready'];
+  const words = [...new Set(PACKS.map(p => p.category)), 'Free .zip downloads', 'No login', '16x – 256x'];
   const chunk = words.map(w => `<span>${w}</span>`).join('<i>✦</i>') + '<i>✦</i>';
   $('#marqueeTrack').innerHTML = chunk + chunk;
 }
@@ -474,7 +370,7 @@ function animateCounters() {
       if (!en.isIntersecting) return;
       io.unobserve(en.target);
       const el = en.target;
-      const target = parseFloat(el.dataset.count);
+      const target = parseFloat(el.dataset.count) || 0;
       const decimals = el.dataset.count.includes('.');
       const suffix = el.dataset.suffix || '';
       const t0 = performance.now();
@@ -513,9 +409,11 @@ $$('[data-demo]').forEach(el => el.addEventListener('click', e => {
 
 /* ---------------- init ---------------- */
 
+fillHero();
 makeSprinkles();
 makeMarquee();
 fillSpotlight();
+buildCatTiles();
 render();
 updateFavUI();
 animateCounters();

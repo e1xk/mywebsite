@@ -25,8 +25,13 @@ while ($listener.IsListening) {
             $ext = [System.IO.Path]::GetExtension($file).ToLower()
             $ctx.Response.ContentType = if ($mime.ContainsKey($ext)) { $mime[$ext] } else { 'application/octet-stream' }
             $ctx.Response.ContentLength64 = $bytes.Length
-            $ctx.Response.OutputStream.Write($bytes, 0, $bytes.Length)
-            $ctx.Response.OutputStream.Close()
+            if ($ctx.Request.HttpMethod -eq 'HEAD') {
+                # HEAD responses must not carry a body
+                $ctx.Response.OutputStream.Close()
+            } else {
+                $ctx.Response.OutputStream.Write($bytes, 0, $bytes.Length)
+                $ctx.Response.OutputStream.Close()
+            }
         } else {
             $ctx.Response.StatusCode = 404
             $ctx.Response.Close()
